@@ -1,0 +1,20 @@
+CROSS_HOST="x86_64-w64-mingw32"
+ORIG_PN="zlib"
+inherit cross
+
+DESCRIPTION="zlib for MinGW-w64 Win32 toolchain"
+HOMEPAGE="http://www.zlib.net/"
+SRC_URI="mirror://sourceforge/libpng/${ORIG_PN}-${PV}.tar.gz"
+
+src_compile() {
+	lndirs
+	cd ${B}
+	cygmake -f win32/Makefile.gcc PREFIX=${CROSS_HOST}- IMPLIB=libz.dll.a
+}
+
+src_install() {
+	cd ${B}
+	dobin zlib1.dll
+	doinclude zlib.h zconf.h
+	dolib libz.a libz.dll.a
+}

@@ -2,7 +2,7 @@ CROSS_HOST="x86_64-w64-mingw32"
 ORIG_PN="zlib"
 inherit cross
 
-DESCRIPTION="zlib for MinGW-w64 Win32 toolchain"
+DESCRIPTION="zlib for MinGW-w64 Win64 toolchain"
 HOMEPAGE="http://www.zlib.net/"
 SRC_URI="mirror://sourceforge/libpng/${ORIG_PN}-${PV}.tar.gz"
 

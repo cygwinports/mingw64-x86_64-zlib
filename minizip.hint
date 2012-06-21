@@ -1,6 +1,7 @@
 category: Devel
-requires: mingw64-x86_64-headers
-sdesc: "zlib for MinGW-w64 Win64 toolchain"
+requires: mingw64-x86_64-headers mingw64-x86_64-zlib
+external-source: mingw64-x86_64-zlib
+sdesc: "minizip for MinGW-w64 Win64 toolchain"
 ldesc: "This package does NOT contain cygwin binaries.  Instead, it
 contains msvcrt-linked binaries (aka 'mingw').  It is for use with the
 mingw64-x86_64-gcc cross compiler, and installs into the

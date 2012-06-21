@@ -1,0 +1,50 @@
+CROSS_HOST="x86_64-w64-mingw32"
+ORIG_PN="zlib"
+inherit cross
+
+DESCRIPTION="zlib for MinGW-w64 Win64 toolchain"
+HOMEPAGE="http://www.zlib.net/"
+SRC_URI="mirror://sourceforge/libpng/${ORIG_PN}-${PV}.tar.gz"
+
+PKG_NAMES="${PN} ${PN/zlib/minizip}"
+PKG_HINTS="setup minizip"
+mingw64_x86_64_zlib_CONTENTS="${CROSS_BINDIR#/}/zlib1.dll ${CROSS_INCLUDEDIR#/}/z*.h ${CROSS_LIBDIR#/}/libz.*
+                              ${CROSS_LIBDIR#/}/pkgconfig/zlib.pc usr/share/doc/${PN}/"
+mingw64_x86_64_minizip_CONTENTS="${CROSS_BINDIR#/}/libminizip-1.dll ${CROSS_INCLUDEDIR#/}/minizip/ ${CROSS_LIBDIR#/}/libminizip.*
+                             ${CROSS_LIBDIR#/}/pkgconfig/minizip.pc usr/share/doc/${PN/zlib/minizip}/"
+
+DISTCLEANFILES="contrib/minizip/Makefile"
+
+src_compile() {
+	cd ${S}/contrib/minizip
+	cygautoreconf
+	lndirs
+
+	cd ${B}
+	cygmake -f win32/Makefile.gcc PREFIX=${CROSS_HOST}- CFLAGS="${CFLAGS}" STRIP=:
+
+	cd ${B}/contrib/minizip
+	rm -fr ${B}/contrib/minizip/*
+	cygconf
+	cygmake LDFLAGS=-no-undefined
+}
+
+src_install() {
+	cd ${B}
+	cyginstall -f win32/Makefile.gcc \
+		SHARED_MODE=1 \
+		BINARY_PATH=${CROSS_BINDIR} \
+		INCLUDE_PATH=${CROSS_INCLUDEDIR} \
+		LIBRARY_PATH=${CROSS_LIBDIR}
+
+	cd ${B}/contrib/minizip
+	cyginstall
+
+	docinto /${PN/zlib/minizip}
+	dodoc ${S}/contrib/minizip/*.txt
+
+	# already provided by native zlib
+	rm -fr ${D}${CROSS_DATADIR}/man
+}
+
+KEEP_LA_FILES="none"

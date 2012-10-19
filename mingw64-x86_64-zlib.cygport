@@ -1,15 +1,23 @@
 CROSS_HOST="x86_64-w64-mingw32"
-ORIG_PN="zlib"
 inherit cross
 
-DESCRIPTION="zlib for MinGW-w64 Win64 toolchain"
+NAME="mingw64-x86_64-zlib"
+VERSION=1.2.7
+RELEASE=1
+CATEGORY="Devel"
+SUMMARY="zlib for MinGW-w64 Win64 toolchain"
+DESCRIPTION="This package does NOT contain cygwin binaries.  Instead, it
+contains msvcrt-linked binaries (aka 'mingw').  It is for use with the
+mingw64-x86_64-gcc cross compiler, and installs into the
+/usr/x86_64-w64-mingw32/sys-root/mingw/{lib,include} directories."
 HOMEPAGE="http://www.zlib.net/"
-SRC_URI="mirror://sourceforge/libpng/${ORIG_PN}-${PV}.tar.gz"
+SRC_URI="mirror://sourceforge/libpng/zlib-${VERSION}.tar.gz"
+SRC_DIR="zlib-${VERSION}"
 
 PKG_NAMES="${PN} ${PN/zlib/minizip}"
-PKG_HINTS="setup minizip"
 mingw64_x86_64_zlib_CONTENTS="${CROSS_BINDIR#/}/zlib1.dll ${CROSS_INCLUDEDIR#/}/z*.h ${CROSS_LIBDIR#/}/libz.*
                               ${CROSS_LIBDIR#/}/pkgconfig/zlib.pc usr/share/doc/${PN}/"
+mingw64_x86_64_minizip_SUMMARY=${SUMMARY/zlib/minizip}
 mingw64_x86_64_minizip_CONTENTS="${CROSS_BINDIR#/}/libminizip-1.dll ${CROSS_INCLUDEDIR#/}/minizip/ ${CROSS_LIBDIR#/}/libminizip.*
                              ${CROSS_LIBDIR#/}/pkgconfig/minizip.pc usr/share/doc/${PN/zlib/minizip}/"
 

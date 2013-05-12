@@ -2,7 +2,7 @@ CROSS_HOST="x86_64-w64-mingw32"
 inherit cross
 
 NAME="mingw64-x86_64-zlib"
-VERSION=1.2.7
+VERSION=1.2.8
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="zlib for MinGW-w64 Win64 toolchain"
@@ -14,12 +14,12 @@ HOMEPAGE="http://www.zlib.net/"
 SRC_URI="mirror://sourceforge/libpng/zlib-${VERSION}.tar.gz"
 SRC_DIR="zlib-${VERSION}"
 
-PKG_NAMES="${PN} ${PN/zlib/minizip}"
+PKG_NAMES="${NAME} ${NAME/zlib/minizip}"
 mingw64_x86_64_zlib_CONTENTS="${CROSS_BINDIR#/}/zlib1.dll ${CROSS_INCLUDEDIR#/}/z*.h ${CROSS_LIBDIR#/}/libz.*
-                              ${CROSS_LIBDIR#/}/pkgconfig/zlib.pc usr/share/doc/${PN}/"
+                              ${CROSS_LIBDIR#/}/pkgconfig/zlib.pc usr/share/doc/${NAME}/"
 mingw64_x86_64_minizip_SUMMARY=${SUMMARY/zlib/minizip}
 mingw64_x86_64_minizip_CONTENTS="${CROSS_BINDIR#/}/libminizip-1.dll ${CROSS_INCLUDEDIR#/}/minizip/ ${CROSS_LIBDIR#/}/libminizip.*
-                             ${CROSS_LIBDIR#/}/pkgconfig/minizip.pc usr/share/doc/${PN/zlib/minizip}/"
+                             ${CROSS_LIBDIR#/}/pkgconfig/minizip.pc usr/share/doc/${NAME/zlib/minizip}/"
 
 DISTCLEANFILES="contrib/minizip/Makefile"
 
@@ -48,7 +48,7 @@ src_install() {
 	cd ${B}/contrib/minizip
 	cyginstall
 
-	docinto /${PN/zlib/minizip}
+	docinto /${NAME/zlib/minizip}
 	dodoc ${S}/contrib/minizip/*.txt
 
 	# already provided by native zlib

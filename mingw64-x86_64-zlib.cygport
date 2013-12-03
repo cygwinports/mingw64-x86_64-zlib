@@ -3,9 +3,9 @@ inherit cross
 
 NAME="mingw64-x86_64-zlib"
 VERSION=1.2.8
-RELEASE=1
+RELEASE=3
 CATEGORY="Devel"
-SUMMARY="zlib for MinGW-w64 Win64 toolchain"
+SUMMARY="zlib for Win64 toolchain"
 DESCRIPTION="This package does NOT contain cygwin binaries.  Instead, it
 contains msvcrt-linked binaries (aka 'mingw').  It is for use with the
 mingw64-x86_64-gcc cross compiler, and installs into the
@@ -13,13 +13,14 @@ mingw64-x86_64-gcc cross compiler, and installs into the
 HOMEPAGE="http://www.zlib.net/"
 SRC_URI="mirror://sourceforge/libpng/zlib-${VERSION}.tar.gz"
 SRC_DIR="zlib-${VERSION}"
+PATCH_URI="1.2.8-no-win8.patch"
 
 PKG_NAMES="${NAME} ${NAME/zlib/minizip}"
 mingw64_x86_64_zlib_CONTENTS="${CROSS_BINDIR#/}/zlib1.dll ${CROSS_INCLUDEDIR#/}/z*.h ${CROSS_LIBDIR#/}/libz.*
-                              ${CROSS_LIBDIR#/}/pkgconfig/zlib.pc usr/share/doc/${NAME}/"
+                            ${CROSS_LIBDIR#/}/pkgconfig/zlib.pc usr/share/doc/${NAME}/"
 mingw64_x86_64_minizip_SUMMARY=${SUMMARY/zlib/minizip}
 mingw64_x86_64_minizip_CONTENTS="${CROSS_BINDIR#/}/libminizip-1.dll ${CROSS_INCLUDEDIR#/}/minizip/ ${CROSS_LIBDIR#/}/libminizip.*
-                             ${CROSS_LIBDIR#/}/pkgconfig/minizip.pc usr/share/doc/${NAME/zlib/minizip}/"
+                               ${CROSS_LIBDIR#/}/pkgconfig/minizip.pc usr/share/doc/${NAME/zlib/minizip}/"
 
 DISTCLEANFILES="contrib/minizip/Makefile"
 
@@ -27,12 +28,12 @@ src_compile() {
 	cd ${S}/contrib/minizip
 	cygautoreconf
 	lndirs
+	rm -fr ${B}/contrib/minizip/*
 
 	cd ${B}
 	cygmake -f win32/Makefile.gcc PREFIX=${CROSS_HOST}- CFLAGS="${CFLAGS}" STRIP=:
 
 	cd ${B}/contrib/minizip
-	rm -fr ${B}/contrib/minizip/*
 	cygconf
 	cygmake LDFLAGS=-no-undefined
 }
@@ -54,5 +55,3 @@ src_install() {
 	# already provided by native zlib
 	rm -fr ${D}${CROSS_DATADIR}/man
 }
-
-KEEP_LA_FILES="none"

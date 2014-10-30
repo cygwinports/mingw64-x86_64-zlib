@@ -3,7 +3,7 @@ inherit cross
 
 NAME="mingw64-x86_64-zlib"
 VERSION=1.2.8
-RELEASE=3
+RELEASE=4
 CATEGORY="Devel"
 SUMMARY="zlib for Win64 toolchain"
 DESCRIPTION="This package does NOT contain cygwin binaries.  Instead, it
@@ -13,7 +13,12 @@ mingw64-x86_64-gcc cross compiler, and installs into the
 HOMEPAGE="http://www.zlib.net/"
 SRC_URI="mirror://sourceforge/libpng/zlib-${VERSION}.tar.gz"
 SRC_DIR="zlib-${VERSION}"
-PATCH_URI="1.2.8-no-win8.patch"
+PATCH_URI="
+	http://pkgs.fedoraproject.org/cgit/zlib.git/plain/zlib-1.2.5-minizip-fixuncrypt.patch
+	http://pkgs.fedoraproject.org/cgit/zlib.git/plain/zlib-1.2.7-z-block-flush.patch
+	http://pkgs.fedoraproject.org/cgit/zlib.git/plain/zlib-1.2.8-minizip-include.patch
+	1.2.8-no-win8.patch
+"
 
 PKG_NAMES="${NAME} ${NAME/zlib/minizip}"
 mingw64_x86_64_zlib_CONTENTS="${CROSS_BINDIR#/}/zlib1.dll ${CROSS_INCLUDEDIR#/}/z*.h ${CROSS_LIBDIR#/}/libz.*
@@ -48,6 +53,9 @@ src_install() {
 
 	cd ${B}/contrib/minizip
 	cyginstall
+
+	# pkg-config doesn't manage to skip this extra -L
+	sed -i -e 's| -L\${sharedlibdir} | |g' ${D}${CROSS_LIBDIR}/pkgconfig/zlib.pc
 
 	docinto /${NAME/zlib/minizip}
 	dodoc ${S}/contrib/minizip/*.txt

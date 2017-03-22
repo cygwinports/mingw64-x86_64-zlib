@@ -2,8 +2,8 @@ CROSS_HOST="x86_64-w64-mingw32"
 inherit cross
 
 NAME="mingw64-x86_64-zlib"
-VERSION=1.2.8
-RELEASE=4
+VERSION=1.2.11
+RELEASE=1
 CATEGORY="Devel"
 SUMMARY="zlib for Win64 toolchain"
 DESCRIPTION="This package does NOT contain cygwin binaries.  Instead, it
@@ -15,9 +15,6 @@ SRC_URI="mirror://sourceforge/libpng/zlib-${VERSION}.tar.gz"
 SRC_DIR="zlib-${VERSION}"
 PATCH_URI="
 	http://pkgs.fedoraproject.org/cgit/zlib.git/plain/zlib-1.2.5-minizip-fixuncrypt.patch
-	http://pkgs.fedoraproject.org/cgit/zlib.git/plain/zlib-1.2.7-z-block-flush.patch
-	http://pkgs.fedoraproject.org/cgit/zlib.git/plain/zlib-1.2.8-minizip-include.patch
-	1.2.8-no-win8.patch
 "
 
 PKG_NAMES="${NAME} ${NAME/zlib/minizip}"
